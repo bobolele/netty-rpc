@@ -9,13 +9,17 @@ public class MessageRecvHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelRead(final ChannelHandlerContext ctx, Object msg) throws Exception {
         System.out.println("channel read");
-        if (msg instanceof MessageRequest) {
-            System.out.println(" messageRequest.messageId : " + ((MessageRequest) msg).getMessageId());
-            MessageResponse response = new MessageResponse();
-            response.setMessageId(((MessageRequest) msg).getMessageId());
-            response.setResult(((MessageRequest) msg).getMessageId() + "---");
-            ctx.writeAndFlush(response);
-        }
+        MessageRequest request = (MessageRequest) msg;
+        MessageResponse response = new MessageResponse();
+
+        MessageRecvExecutor.getInstance().execute(ctx,request,response);
+//        if (msg instanceof MessageRequest) {
+//            System.out.println(" messageRequest.messageId : " + ((MessageRequest) msg).getMessageId());
+//            MessageResponse response = new MessageResponse();
+//            response.setMessageId(((MessageRequest) msg).getMessageId());
+//            response.setResult(((MessageRequest) msg).getMessageId() + "---");
+//            ctx.writeAndFlush(response);
+//        }
     }
 
     @Override

@@ -6,7 +6,7 @@ import org.springframework.beans.factory.xml.BeanDefinitionParser;
 import org.springframework.beans.factory.xml.ParserContext;
 import org.w3c.dom.Element;
 
-public class RegisteyParser  implements BeanDefinitionParser {
+public class RegistryParser implements BeanDefinitionParser {
     @Override
     public BeanDefinition parse(Element element, ParserContext parserContext) {
         String id = element.getAttribute("id");
@@ -14,13 +14,13 @@ public class RegisteyParser  implements BeanDefinitionParser {
         int port = Integer.parseInt(element.getAttribute("port"));
 
         RootBeanDefinition beanDefinition = new RootBeanDefinition();
-        beanDefinition.setBeanClass(NettyRpcRegistery.class);
+        beanDefinition.setBeanClass(NettyRpcRegistry.class);
         beanDefinition.setLazyInit(false);
 
         beanDefinition.getPropertyValues().addPropertyValue("ip", ip);
         beanDefinition.getPropertyValues().addPropertyValue("port", port);
 
-        parserContext.getRegistry().registerBeanDefinition(id,beanDefinition);
+        parserContext.getRegistry().registerBeanDefinition(id, beanDefinition);
 
         return beanDefinition;
     }

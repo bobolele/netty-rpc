@@ -1,4 +1,10 @@
 package io.lybo.rpc.test.impl;
 
-public class UserServiceImpl {
+import io.lybo.rpc.test.UserService;
+
+public class UserServiceImpl implements UserService {
+    @Override
+    public String getById(String id) {
+        return "{\"userId\":\"" + id + "\",\"userName\":\"lybo\"}";
+    }
 }
