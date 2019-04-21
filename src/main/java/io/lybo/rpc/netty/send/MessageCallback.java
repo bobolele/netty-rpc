@@ -5,6 +5,7 @@ import io.lybo.rpc.config.ErrorTipConfig;
 import io.lybo.rpc.exception.InvokeTimeoutException;
 import io.lybo.rpc.model.MessageRequest;
 import io.lybo.rpc.model.MessageResponse;
+import io.lybo.rpc.netty.send.map.CallBackMap;
 
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Condition;
@@ -61,6 +62,7 @@ public class MessageCallback {
             e.printStackTrace();
         }
         if (!onTime) {
+            CallBackMap.getInstance().remove(request.getMessageId());
             throw new InvokeTimeoutException(ErrorTipConfig.INVOKE_TIMEOUT_MSG);
         }
     }

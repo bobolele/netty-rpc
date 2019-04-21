@@ -2,16 +2,15 @@ package io.lybo.rpc.netty.send;
 
 import io.lybo.rpc.model.MessageRequest;
 import io.lybo.rpc.model.MessageResponse;
+import io.lybo.rpc.netty.send.map.CallBackMap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 
 import java.net.SocketAddress;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class MessageSendHandler extends ChannelInboundHandlerAdapter {
     private SocketAddress remoteAddr;
-    private ConcurrentHashMap<String, MessageCallback> mapCallBack = new ConcurrentHashMap<String, MessageCallback>();
     private volatile Channel channel;
 
     @Override
@@ -29,16 +28,13 @@ public class MessageSendHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         System.out.println("channel read");
-        if (msg instanceof MessageResponse) {
-            MessageResponse response = (MessageResponse) msg;
-            String messageId = (response).getMessageId();
-            System.out.println("messageResponse.messageId : " + messageId);
-            MessageCallback callback = mapCallBack.get(messageId);
-            if (callback != null) {
-                mapCallBack.remove(messageId);
-                callback.over(response);
-            }
-
+        MessageResponse response = (MessageResponse) msg;
+        String messageId = (response).getMessageId();
+        System.out.println("messageResponse.messageId : " + messageId);
+        MessageCallback callback = CallBackMap.getInstance().get(messageId);
+        if (callback != null) {
+            CallBackMap.getInstance().remove(messageId);
+            callback.over(response);
         }
     }
 
@@ -54,7 +50,7 @@ public class MessageSendHandler extends ChannelInboundHandlerAdapter {
 
     public Object sendRequest(MessageRequest request) {
         MessageCallback callback = new MessageCallback(request);
-        mapCallBack.put(request.getMessageId(),callback);
+        CallBackMap.getInstance().put(request.getMessageId(), callback);
         channel.writeAndFlush(request);
         return callback.start();
     }
