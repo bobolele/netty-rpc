@@ -1,4 +1,4 @@
-package io.lybo.rpc.spring;
+package io.lybo.rpc.spring.reference;
 
 import com.google.common.reflect.Reflection;
 import io.lybo.rpc.proxy.MessageSendProxy;

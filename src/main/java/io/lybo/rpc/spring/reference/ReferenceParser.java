@@ -1,4 +1,4 @@
-package io.lybo.rpc.spring;
+package io.lybo.rpc.spring.reference;
 
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.support.RootBeanDefinition;
